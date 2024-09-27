@@ -1,17 +1,34 @@
 import { useParams } from "react-router-dom";
-import { usePost } from "hooks/usePost";
+import { useDeletePost, usePost, useUpdatePost } from "hooks/usePost";
+import PostDetailContainer from "components/post/PostDetailContainer";
+import { Suspense } from "react";
 
 function Post() {
-  const { id } = useParams<{ id: string }>();
-  const { data, error, isLoading } = usePost(id ?? "");
+  const id = Number(useParams<{ id: string }>().id);
+  const { mutate: updatePost } = useUpdatePost();
+  const { mutate: deletePost } = useDeletePost();
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error fetching post</div>;
+  const handleUpdate = (updatedData: IPost) => {
+    updatePost(updatedData);
+  };
+
+  const handleDelete = (id: number) => {
+    deletePost(id);
+  };
 
   return (
     <div>
-      <h1>{data.title}</h1>
-      <p>{data.body}</p>
+      <button
+        onClick={() =>
+          handleUpdate({ id: id, title: "강제 수정", author: "typicode" })
+        }
+      >
+        수정
+      </button>
+      <button onClick={() => handleDelete(id)}>삭제</button>
+      <Suspense fallback={<div>Loading...</div>}>
+        <PostDetailContainer id={id} />
+      </Suspense>
     </div>
   );
 }

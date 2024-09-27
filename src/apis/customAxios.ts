@@ -1,7 +1,8 @@
 import axios from "axios";
+import { BASE_URL } from "constants/queryKey";
 
 const customAxios = axios.create({
-  baseURL: "https://jsonplaceholder.typicode.com",
+  baseURL: BASE_URL,
   timeout: 1000,
   headers: { "X-Custom-Header": "foobar" },
 });
