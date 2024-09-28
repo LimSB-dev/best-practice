@@ -1,22 +1,28 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  value: 0,
+  id: 0,
+  title: "",
+  author: "",
 };
 
 export const postSlice = createSlice({
   name: "post",
   initialState,
   reducers: {
-    increment: (state) => {
-      state.value += 1;
+    setPost: (state, action) => {
+      state.id = action.payload.id;
+      state.title = action.payload.title;
+      state.author = action.payload.author;
     },
-    decrement: (state) => {
-      state.value -= 1;
+    resetPost: (state) => {
+      state.id = 0;
+      state.title = "";
+      state.author = "";
     },
   },
 });
 
-export const { increment, decrement } = postSlice.actions;
+export const { setPost, resetPost } = postSlice.actions;
 
 export default postSlice.reducer;

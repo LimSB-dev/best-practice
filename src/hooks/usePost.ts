@@ -9,14 +9,20 @@ import {
 import { QUERY } from "constants/queryKey";
 
 /**
- * 모든 게시물 데이터 호출
+ * 모든 게시물 데이터
  */
 export const usePosts = () => {
-  return useQuery({ queryKey: [QUERY.GET_POSTS], queryFn: () => fetchPosts() });
+  return useQuery<IPost[], Error>({
+    queryKey: [QUERY.GET_POSTS.key],
+    queryFn: () => fetchPosts(),
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 10,
+    refetchOnWindowFocus: false,
+  });
 };
 
 /**
- * 게시물 상세 데이터 호출
+ * 게시물 상세 데이터
  * @params id: 게시글 아이디
  */
 export const usePost = (id: number) => {
@@ -34,7 +40,7 @@ export const useCreatePost = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (createdPost: IPost) => createPost(createdPost.id, createdPost),
+    mutationFn: createPost,
     onSuccess: (createdPost) => {
       queryClient.invalidateQueries({
         queryKey: QUERY.GET_POST(createdPost.id).key,
@@ -50,7 +56,7 @@ export const useUpdatePost = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (updatedPost: IPost) => updatePost(updatedPost),
+    mutationFn: updatePost,
     onSuccess: (updatedPost) => {
       queryClient.invalidateQueries({
         queryKey: QUERY.GET_POST(updatedPost.id).key,
@@ -60,13 +66,13 @@ export const useUpdatePost = () => {
 };
 
 /**
- * 게시물 삭제 Hook
+ * 게시물 삭제
  */
 export const useDeletePost = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: number) => deletePost(id),
+    mutationFn: deletePost,
     onSuccess: (deletedPost) => {
       queryClient.invalidateQueries({
         queryKey: QUERY.GET_POSTS.key,

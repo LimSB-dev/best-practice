@@ -6,26 +6,41 @@ import { persistStore } from "redux-persist";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import store from "store";
 
-import Home from "./pages/Home";
-import Post from "./pages/Post";
+import Root from "./pages/Root";
+import Post from "pages/Post";
+import PostDetail from "./pages/PostDetail";
 import Error from "pages/Error";
 import NotFound from "pages/NotFound";
+import PostEdit from "pages/PostEdit";
+import PostCreate from "pages/PostCreate";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <Root />,
     errorElement: <Error />,
-  },
-  {
-    path: "post/:id",
-    element: <Post />,
-    errorElement: <Error />,
-  },
-  {
-    path: "*",
-    element: <NotFound />,
-    errorElement: <Error />,
+    children: [
+      {
+        path: "post",
+        element: <Post />,
+      },
+      {
+        path: "post/create",
+        element: <PostCreate />,
+      },
+      {
+        path: "post/:id",
+        element: <PostDetail />,
+      },
+      {
+        path: "/post/:id/edit",
+        element: <PostEdit />,
+      },
+      {
+        path: "*",
+        element: <NotFound />,
+      },
+    ],
   },
 ]);
 

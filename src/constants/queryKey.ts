@@ -14,7 +14,7 @@ export const QUERY = {
   // posts
   GET_POSTS: createQuery("get", "posts"),
   GET_POST: (id: number) => createQuery("get", "posts", id),
-  POST_POST: (id: number) => createQuery("post", "posts", id),
+  POST_POST: () => createQuery("post", "posts"),
   PUT_POST: (id: number) => createQuery("put", "posts", id),
   DELETE_POST: (id: number) => createQuery("delete", "posts", id),
 
