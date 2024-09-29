@@ -1,10 +1,56 @@
 import { Outlet } from "react-router-dom";
+import styled from "@emotion/styled";
+
+import Footer from "components/common/Footer";
+import useCustomTheme from "hooks/useCustomTheme";
+import { ColorTypes } from "@emotion/react";
+import { common } from "styles/theme";
+
+const StyledMain = styled.main<{ theme: ColorTypes }>`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  height: 100vh;
+  padding: 24px;
+  color: ${(props) => props.theme.color};
+  background: ${(props) => props.theme.background};
+  border-color: ${(props) => props.theme.border};
+
+  h1 {
+    font-size: ${common.fontSize.h1};
+    font-weight: 700;
+  }
+
+  h2 {
+    font-size: ${common.fontSize.h2};
+    font-weight: 600;
+  }
+
+  h3 {
+    font-size: ${common.fontSize.h3};
+    font-weight: 500;
+  }
+
+  p {
+    font-size: ${common.fontSize.p};
+  }
+
+  caption {
+    font-size: ${common.fontSize.caption};
+  }
+`;
+
+const StyledSection = styled.section`
+  height: 100%;
+`;
 
 export default function Root() {
+  const theme = useCustomTheme();
   return (
-    <>
+    <StyledMain theme={theme}>
       <div id="sidebar">
-        <h1>React Router Contacts</h1>
         <div>
           <form id="search-form" role="search">
             <input
@@ -21,20 +67,12 @@ export default function Root() {
             <button type="submit">New</button>
           </form>
         </div>
-        <nav>
-          <ul>
-            <li>
-              <a href={`/contacts/1`}>Your Name</a>
-            </li>
-            <li>
-              <a href={`/contacts/2`}>Your Friend</a>
-            </li>
-          </ul>
-        </nav>
+        <nav></nav>
       </div>
-      <div id="detail">
+      <StyledSection id="detail">
         <Outlet />
-      </div>
-    </>
+      </StyledSection>
+      <Footer />
+    </StyledMain>
   );
 }

@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import { persistStore } from "redux-persist";
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import store from "store";
+import { ThemeProvider } from "@emotion/react";
 
 import Root from "./pages/Root";
 import Post from "pages/Post";
@@ -13,6 +11,10 @@ import Error from "pages/Error";
 import NotFound from "pages/NotFound";
 import PostEdit from "pages/PostEdit";
 import PostCreate from "pages/PostCreate";
+
+import { darkTheme, lightTheme } from "styles/theme";
+import GlobalStyle from "styles/global";
+import { useAppSelector } from "hooks/useRedux";
 
 const router = createBrowserRouter([
   {
@@ -55,14 +57,15 @@ function App() {
         },
       })
   );
+  const { theme } = useAppSelector((state) => state.theme);
+
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistStore(store)}>
-        <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router} />
-        </QueryClientProvider>
-      </PersistGate>
-    </Provider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
+        <GlobalStyle />
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 
